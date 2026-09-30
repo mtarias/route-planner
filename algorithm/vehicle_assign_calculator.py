@@ -1,7 +1,7 @@
 # Algorithm to assign packages to vehicles using a greedy strategy
 # Input: Dict<Vehicle> vehicles, Array<Package> packages, Dict<Cost> matrix_costs
 # Output: Integer solution_cost, Array<String> final_solution
-def calculate(vehicles, packages, matrix_costs):
+def calculate(vehicles, packages, matrix_costs, verbose=False):
 
     # Init variables
     solution_cost = 0
@@ -43,11 +43,13 @@ def calculate(vehicles, packages, matrix_costs):
                 vehicle.occupied_space += package.weight
                 solution_cost += min_cost
                 i = 0
-                print('EL PAQUETE '+str(package.name)+' SE ASIGNO A '+str(vehicle.name)+', COSTO: '+str(min_cost)+' , ESPACIO LIBRE: '+str(vehicle.capacity-vehicle.occupied_space))
+                if verbose:
+                    print('PACKAGE '+str(package.name)+' ASSIGNED TO '+str(vehicle.name)+', COST: '+str(min_cost)+' , FREE SPACE: '+str(vehicle.capacity-vehicle.occupied_space))
             
             # Else, go to the next cost of sorted_costs
             else:
-                print('EL PAQUETE '+str(package.name)+' NO PUEDE SER ASIGNADO A '+str(vehicle.name)+', CARGA: '+str(package.weight)+' , ESPACIO LIBRE: '+str(vehicle.capacity-vehicle.occupied_space))
+                if verbose:
+                    print('PACKAGE '+str(package.name)+' CANNOT BE ASSIGNED TO '+str(vehicle.name)+', WEIGHT: '+str(package.weight)+' , FREE SPACE: '+str(vehicle.capacity-vehicle.occupied_space))
                 i -= 1
                 a += 1
     

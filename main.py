@@ -1,25 +1,31 @@
-import csv
+import argparse
 import sys
-import numpy as np
 
-from services import data_export
-from services import data_extractor
 from algorithm import vehicle_assign_calculator
+from services import data_export
+from services import instance_store
 
-if __name__ == "__main__":
-    _, exp = sys.argv
-    
-    # Get data from txt files
-    vehicles, packages, matrix_costs = data_extractor.get_data_from_txt(exp)
 
-    # Call algorithm: Calculate vehicle for each package
-    solution_cost, final_solution = vehicle_assign_calculator.calculate(vehicles, packages, matrix_costs)
+def run_experiment(exp):
+    vehicles, packages, matrix_costs = instance_store.load_instance(exp)
+    solution_cost, final_solution = vehicle_assign_calculator.calculate(
+        vehicles, packages, matrix_costs, verbose=True
+    )
 
-    # Show results in console
-    print('COSTO DE LA SOLUCIÓN: '+str(solution_cost))
-
+    print(f"SOLUTION COST: {solution_cost}")
     for solution in final_solution:
         print(solution)
 
-    # Save results in txt
     data_export.export_results(exp, solution_cost, final_solution)
+    return solution_cost, final_solution
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Run a vehicle assignment instance.")
+    parser.add_argument("experiment", help="Instance folder inside data/, for example exp1")
+    args = parser.parse_args()
+
+    try:
+        run_experiment(args.experiment)
+    except (OSError, ValueError) as error:
+        sys.exit(f"Error: {error}")

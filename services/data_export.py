@@ -1,10 +1,16 @@
-import os
+import json
+from pathlib import Path
 
-# Method te write result to txt file
-# Input: String exp, Integer solution_cost, Array<String> final_solution
+RESULTS_ROOT = Path(__file__).resolve().parent.parent / "results"
+
+
 def export_results(exp, solution_cost, final_solution):
-    with open('results/results_'+exp+'.txt', 'w') as the_file:
-        the_file.writelines('COSTE DE LA SOLUCIÓN: '+str(solution_cost)+ os.linesep)
-
-        for solution in final_solution:
-            the_file.writelines(solution+ os.linesep)
+    RESULTS_ROOT.mkdir(exist_ok=True)
+    (RESULTS_ROOT / f"results_{exp}.json").write_text(
+        json.dumps(
+            {"experiment": exp, "solution_cost": solution_cost, "assignments": final_solution},
+            indent=2,
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )

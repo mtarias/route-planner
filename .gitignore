@@ -2,9 +2,12 @@
 models/__pycache__/*
 algorithm/__pycache__/*
 services/__pycache__/*
+__pycache__/*
+*.pyc
 
 # Ignore results
 results/*.txt
+results/*.json
 
 # Ignore enunciado.pdf and instancias_de_prueba.xlsx
 enunciado.pdf
